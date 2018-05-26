@@ -11,3 +11,6 @@ while($row = $sql->array_result($res))
 $sql->free_result(); 
 $sql->close_connect(); */
 
+
+
+$idCliente = 1;
