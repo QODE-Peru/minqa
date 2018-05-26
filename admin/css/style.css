@@ -5068,3 +5068,30 @@ span.customSelect.changed {
   magin-top:10px;
   border-radius: 4px;
 }
+.tarjeta-costado {
+  color:#202020;
+  border-radius: 8px;
+padding:10px 20px;
+display:inline-block;
+-webkit-box-shadow: 0px 0px 5px 0px rgba(122,122,122,1);
+-moz-box-shadow: 0px 0px 5px 0px rgba(122,122,122,1);
+box-shadow: 0px 0px 5px 0px rgba(122,122,122,1);
+}
+.portada {
+  position:relative;
+}
+img.portada {
+  width: 100%;
+}
+.box {
+  color:#202020;
+  text-align: center;
+}
+.box .title{
+  font-weight: bold;
+  font-size:15px;
+}
+.box .count{
+  font-weight: bold;
+  font-size:28px;
+}
