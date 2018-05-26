@@ -247,9 +247,20 @@
             <input type = "text" value = "" placeholder="S/ 5.00">\
           </div>\
           <div style= "text-align:center">\
-            <div class= "btn-invertir">invertir</div>\
+            <div id= "montar-cargo" class= "btn-invertir">invertir</div>\
           </div>\
           ');
+
+          var d = document.getElementById('montar-cargo');
+          $(d).on('click',function(){
+            $('body').append('<div class = "tapa"></div>\
+            <div class = "bcp-cargar"><h3 >Escoge una cuenta o método de pago</h3><p>monto: <strong>s/. 5<strong></p>\
+            <ul><li><p>Cuenta ahorros bcp</p><p>10010-1902210991129</p></li>\
+            <li><p>Cuenta VISA</p><p>10010-1902210991129</p></li>\
+            </ul></div>');
+
+          });
+
         });
 
         $('.globo.chat').on('click',function(){
@@ -266,7 +277,11 @@
             <div class= "btn-invertir">enviar</div>\
           </div>\
           ');
+
+
+
         });
+
 
       });
 
