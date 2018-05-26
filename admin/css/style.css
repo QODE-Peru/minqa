@@ -5087,10 +5087,17 @@ img.portada {
   color:#202020;
   text-align: center;
 }
+.box-red {
+  color: #202020;
+  text-align: left;
+}
+.box-red .title,
 .box .title{
   font-weight: bold;
   font-size:15px;
 }
+
+.box-red .count,
 .box .count{
   font-weight: bold;
   font-size:28px;
