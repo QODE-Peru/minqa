@@ -162,7 +162,7 @@
         <img class = "portada" src = "assets/bl.jpg" style = "width:100%;">
 			</div><!--/.row-->
 
-      <div class="row" class = "" style = "margin-top:10px; margin-bottom:10px;">
+      <div class="row" class = "" style = "margin-top:10px; margin-bottom:10px;position:relative;">
         <div class = "col-lg-4 col-md-4 col-sm-12 col-xs-12 box-red">
           <div class = "title">Alcanzado</div>
           <div class = "meter"><div class = "meter-content"></div></div>
@@ -180,6 +180,9 @@
           <div class="title">Ganancia Estimada</div>
           <div class="count">4.5%</div>
         </div>
+        <div class = "globo chat"><img src = "assets/misinversiones-icon-active.png"></div>
+        <div class = "globo invertir"><img src = "assets/misinversiones-icon-active.png"></div>
+        <div class = "globo contenido"></div>
 			</div><!--/.row-->
 
           </section>
@@ -230,25 +233,43 @@
 	<script src="js/jquery.slimscroll.min.js"></script>
   <script>
 
-      //knob
-      $(function() {
-        $(".knob").knob({
-          'draw' : function () {
-            $(this.i).val(this.cv + '%')
-          }
-        })
-      });
 
       //carousel
       $(document).ready(function() {
-          $("#owl-slider").owlCarousel({
-              navigation : true,
-              slideSpeed : 300,
-              paginationSpeed : 400,
-              singleItem : true
+        $('.globo.invertir').on('click',function(){
+          $('.globo.contenido').empty();
+          $('.globo.contenido').css('display','block');
+          $('.globo.contenido').append('\
+          <div  class= "titulo-contenido-globo">\
+            <p>Monto a invertir</p>\
+          </div>\
+          <div  class= "input-contenido-globo">\
+            <input type = "text" value = "" placeholder="S/ 5.00">\
+          </div>\
+          <div style= "text-align:center">\
+            <div class= "btn-invertir">invertir</div>\
+          </div>\
+          ');
+        });
 
-          });
+        $('.globo.chat').on('click',function(){
+          $('.globo.contenido').empty();
+          $('.globo.contenido').css('display','block');
+          $('.globo.contenido').append('\
+          <div  class= "titulo-contenido-globo">\
+            <p>Mensaje</p>\
+          </div>\
+          <div  class= "input-contenido-globo">\
+            <textarea type = "text" value = "" placeholder="S/ 5.00"></textarea>\
+          </div>\
+          <div style= "text-align:center">\
+            <div class= "btn-invertir">enviar</div>\
+          </div>\
+          ');
+        });
+
       });
+
 
       //custom select box
 
