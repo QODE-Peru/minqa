@@ -1,21 +1,21 @@
 <?php
   include_once(dirname(__DIR__) . '/Fw/config.php');
 
-  /*$res = $sql->query("SELECT * FROM `mq_inversion` ORDER BY `inv_id` DESC;"); 
-  while($row = $sql->array_result($res)) 
-  { 
-      echo($row['spalte']."<br />\n"); 
-  } */
+  $prepareEmprendimiendo = $sql->query('select * from mp_emprendimiento where emd_id = '. $_GET['emprendimiento']);
 
-$rs = $sql->query("select * from mq_inversion as iv left join mp_emprendimiento as em on iv.inv_emd_id = em.emd_id where inv_cli_id = " . $idCliente);
+  $rsEmprendimiento = $sql->object_result($prepareEmprendimiendo);
 
-$rsTotales = $sql->query("select sum(inv_inversion) as inversion, sum(inv_ganancia) as ganancia, sum(inv_capital_actual) as capital_actual, sum(inv_diferencia) as diferencia from mq_inversion where inv_cli_id = ". $idCliente);
-//var_dump($sql->array_result($rsTotales));
+  if($rsEmprendimiento)
+  {
+    $prepareTotalInversionista = $sql->query('select count(inv_cli_id) as totalInversionista from mq_inversion where inv_emd_id = '. $rsEmprendimiento->emd_id);
 
-$rsTotalesRow = $sql->row_result($rsTotales);
+    $rsTotalInversionista = $sql->object_result($prepareTotalInversionista);
+  }
 
 
+  //var_dump($sql->array_result($prepareEmprendimiendo));
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -139,24 +139,24 @@ $rsTotalesRow = $sql->row_result($rsTotales);
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
               <ul class="sidebar-menu">
-                  <li class="active">
-                      <a class="" href="index.html">
-                          <img class = "dashboard_icon" src = "assets/dashboard-icon-active.png">
-                          <span>Dashboard</span>
-                      </a>
-                  </li>
-                  <li class="">
-                      <a class="" href="misinversiones.html">
-                          <img class = "dashboard_icon" src = "assets/misinversiones-icon.png">
-                          <span>Mis Inversiones</span>
-                      </a>
-                  </li>
-                  <li class="">
-                      <a class="" href="oportunidades.html">
-                          <img class = "dashboard_icon" src = "assets/oportunidades-icon.png">
-                          <span>Oportunidades</span>
-                      </a>
-                  </li>
+                <li class="">
+                    <a class="" href="index.html">
+                        <img class = "dashboard_icon" src = "assets/dashboard-icon.png">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a class="" href="misinversiones.html">
+                        <img class = "dashboard_icon" src = "assets/misinversiones-icon.png">
+                        <span>Mis Inversiones</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a class="" href="oportunidades.html">
+                        <img class = "dashboard_icon" src = "assets/oportunidades-icon-active.png">
+                        <span>Oportunidades</span>
+                    </a>
+                </li>
 
 
               </ul>
@@ -167,104 +167,41 @@ $rsTotalesRow = $sql->row_result($rsTotales);
 
       <!--main content start-->
       <section id="main-content">
-          <section class="wrapper">
+
+      <section class="wrapper">
+        <div class = "row" style = "padding:10px 0px;">
+          <div class = "pull-right tarjeta-costado">Mi Capital Actual: <strong>S/<?php echo $rsEmprendimiento->emd_monto; ?></strong></div>
+          <p class = "">MQ Balanceado</p>
+          <h2><?php echo $rsEmprendimiento->emd_nombre; ?></h2>
+        </div>
               <!--overview start-->
 
-
-      <div class="row">
-
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-          <div class="info-box white-bg">
-            <div class="title">Mis Inversiones</div>
-            <div class="count">S/ <?php echo $rsTotalesRow[0] ?></div>
-					</div><!--/.info-box-->
-				</div><!--/.col-->
-
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-          <div class="info-box white-bg">
-            <div class="title">Mis Ganancias</div>
-            <div class="count">S/ <?php echo $rsTotalesRow[1] ?></div>
-					</div><!--/.info-box-->
-				</div><!--/.col-->
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-          <div class="info-box white-bg">
-            <div class="title">Mis Capital Actual</div>
-            <div class="count">S/ <?php echo $rsTotalesRow[2] ?></div>
-          </div><!--/.info-box-->
-				</div><!--/.col-->
-
-				<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-          <div class="info-box white-bg">
-            <div class="title">Resumen General de Inversiones</div>
-            <div class="tabla-bcp-marco">
-              <table class = "tabla-bcp">
-                <tr>
-                  <th>
-                    Proyectos
-                  </th>
-                  <th>
-                    Inversiones (S/.)
-                  </th>
-                  <th>
-                    Ganancias
-                  </th>
-                  <th>
-                    Capital Actual
-                  </th>
-                  <th>
-                    Diferencia %
-                  </th>
-                </tr>
-                <?php
-                while($row = $sql->array_result($rs)) 
-                  { 
-                      echo '<tr>
-                            <td>'.utf8_encode($row['emd_nombre']).'   </td><td>S/. '.$row['inv_inversion'].'</td><td>S/. '.$row['inv_ganancia'].'</td><td>S/. '.$row['inv_capital_actual'].'</td><td>+ '.$row['inv_diferencia'].'%</td>
-                            </tr>';
-                  } 
-                ?>
-                <!--<tr>
-                  <td>Laboratorios digitales   </td><td>S/. 1500</td><td>S/.350</td><td>S/. 1 850</td><td>+ 20%</td>
-                </tr>
-                <tr>
-                  <td>Baños Portatiles         </td><td>S/. 800</td><td>S/. 50</td><td>S/. 850</td><td>+ 5%</td>
-                </tr>
-                <tr>
-                  <td>Laboratorios digitales   </td><td>S/. 1500</td><td>S/.350</td><td>S/. 1 850</td><td>+ 20%</td>
-                </tr>
-                <tr>
-                  <td>Baños Portatiles         </td><td>S/. 800</td><td>S/. 50</td><td>S/. 850</td><td>+ 5%</td>
-                </tr>
-                <tr class ="spacer"></tr>-->
-                <tr>
-                  <td>Total         </td><td>S/. 6 500</td><td>S/. 3 500</td><td>S/. 10 000</td><td>+ 55%</td>
-                </tr>
-                <?php
-                  while ($totales = $sql->array_result($rsTotales))
-                  {
-                    echo '<tr>
-                  <td>Total         </td><td>S/. '.$totales['inversion'].'</td><td>S/. '.$totales['ganancia'].'</td><td>S/. '.$totales['capital_actual'].'</td><td>+ '.$totales['diferencia'].'%</td>
-                </tr>';
-                  }
-                ?>
-              </table>
-            </div>
-          </div><!--/.info-box-->
-        </div><!--/.col-->
-
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-					<div class="info-box white-bg">
-            <div class="title">Resumen Visual</div>
-            <div class="bcp-tabla-imagen"><img src="img/tabla.png"></div>
-					</div><!--/.info-box-->
-				</div><!--/.col-->
-
-
-
-
+      <div class="row" class = "portada">
+        <img class = "portada" src = "assets/bl.jpg" style = "width:100%;">
 			</div><!--/.row-->
 
-
+      <div class="row" class = "" style = "margin-top:10px; margin-bottom:10px;position:relative;">
+        <div class = "col-lg-4 col-md-4 col-sm-12 col-xs-12 box-red">
+          <div class = "title">Alcanzado</div>
+          <div class = "meter"><div class = "meter-content"></div></div>
+          <div class = "count">79 000 de 100 000</div>
+        </div>
+        <div class = "col-lg-2 col-md-2 col-sm-6 col-xs-12 box">
+          <div class="title">Inversionistas</div>
+          <div class="count"><?php echo $rsTotalInversionista->totalInversionista; ?></div>
+        </div>
+        <div class = "col-lg-2 col-md-2 col-sm-6 col-xs-12 box">
+          <div class="title">Participacion Promedio</div>
+          <div class="count">2%</div>
+        </div>
+        <div class = "col-lg-2 col-md-2 col-sm-6 col-xs-12 box">
+          <div class="title">Ganancia Estimada</div>
+          <div class="count">4.5%</div>
+        </div>
+        <div class = "globo chat"><img src = "assets/misinversiones-icon-active.png"></div>
+        <div class = "globo invertir"><img src = "assets/misinversiones-icon-active.png"></div>
+        <div class = "globo contenido"></div>
+			</div><!--/.row-->
 
           </section>
       </section>
@@ -314,25 +251,58 @@ $rsTotalesRow = $sql->row_result($rsTotales);
 	<script src="js/jquery.slimscroll.min.js"></script>
   <script>
 
-      //knob
-      $(function() {
-        $(".knob").knob({
-          'draw' : function () {
-            $(this.i).val(this.cv + '%')
-          }
-        })
-      });
 
       //carousel
       $(document).ready(function() {
-          $("#owl-slider").owlCarousel({
-              navigation : true,
-              slideSpeed : 300,
-              paginationSpeed : 400,
-              singleItem : true
+        $('.globo.invertir').on('click',function(){
+          $('.globo.contenido').empty();
+          $('.globo.contenido').css('display','block');
+          $('.globo.contenido').append('\
+          <div  class= "titulo-contenido-globo">\
+            <p>Monto a invertir</p>\
+          </div>\
+          <div  class= "input-contenido-globo">\
+            <input type = "text" value = "" placeholder="S/ 5.00">\
+          </div>\
+          <div style= "text-align:center">\
+            <div id= "montar-cargo" class= "btn-invertir">invertir</div>\
+          </div>\
+          ');
+
+          var d = document.getElementById('montar-cargo');
+          $(d).on('click',function(){
+            $('body').append('<div class = "tapa"></div>\
+            <div class = "bcp-cargar"><h3 >Escoge una cuenta o método de pago</h3><p>monto: <strong>s/. 5<strong></p>\
+            <ul><li><p>Cuenta ahorros bcp</p><p>10010-1902210991129</p></li>\
+            <li><p>Cuenta VISA</p><p>10010-1902210991129</p></li>\
+            </ul></div>');
 
           });
+
+        });
+
+        $('.globo.chat').on('click',function(){
+          $('.globo.contenido').empty();
+          $('.globo.contenido').css('display','block');
+          $('.globo.contenido').append('\
+          <div  class= "titulo-contenido-globo">\
+            <p>Mensaje</p>\
+          </div>\
+          <div  class= "input-contenido-globo">\
+            <textarea type = "text" value = "" placeholder="S/ 5.00"></textarea>\
+          </div>\
+          <div style= "text-align:center">\
+            <div class= "btn-invertir">enviar</div>\
+          </div>\
+          ');
+
+
+
+        });
+
+
       });
+
 
       //custom select box
 
